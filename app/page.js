@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import AppShell from '@/components/AppShell';
+import AppShell from '../components/AppShell';
 
 export default function Home() {
   const [currentModule, setCurrentModule] = useState('dashboard');

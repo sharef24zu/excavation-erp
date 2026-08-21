@@ -41,6 +41,7 @@ export default function App() {
       noData: 'אין נתונים להצגה',
       search: 'חיפוש לפי שם...',
       addBtn: 'הוספה חדשה',
+      uploadFile: 'לחץ להעלאת קובץ',
     },
     ar: {
       title: 'زوبيدات خالد لأعمال الحفريات والتطوير',
@@ -69,6 +70,7 @@ export default function App() {
       noData: 'لا توجد بيانات للعرض',
       search: 'بحث حسب الاسم...',
       addBtn: 'إضافة جديدة',
+      uploadFile: 'اضغط لرفع ملف',
     }
   }[lang];
 
@@ -119,7 +121,8 @@ export default function App() {
                 <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'מיקום / כתובת' : 'الموقع / العنوان'}</label>
                 <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
               </div>
-            </>
+            </div>
+          </>
         );
 
       case 'equipment':

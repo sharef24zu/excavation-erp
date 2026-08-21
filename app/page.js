@@ -8,10 +8,15 @@ export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // Form State Handlers
+  const [equipType, setEquipType] = useState('محفر');
+  const [equipStatus, setEquipStatus] = useState('פעיל');
+  const [clientType, setClientType] = useState('פרטי');
+
   const t = {
     he: {
       title: 'זוביידאת חאלד עבודות עפר ופיתוח',
-      subTitle: 'ניהול חברת עפר וחפורות',
+      subTitle: 'פיקוח וניהול של ביצוע עבודות עפר',
       dashboard: 'לוח בקרה',
       alerts: 'רישיונות ותראות',
       projects: 'פרויקטים ואתרים',
@@ -33,13 +38,13 @@ export default function App() {
       netProfit: 'רווח נקי',
       save: 'שמירה',
       cancel: 'ביטול',
-      noData: 'אין נתונים רשומים',
-      search: 'חיפוש...',
-      uploadFile: 'בחר תמונה / קובץ מהמכשיר',
+      noData: 'אין נתונים להצגה',
+      search: 'חיפוש לפי שם...',
+      addBtn: 'הוספה חדשה',
     },
     ar: {
       title: 'زوبيدات خالد لأعمال الحفريات والتطوير',
-      subTitle: 'إدارة شركة الحفريات',
+      subTitle: 'إشراف وإدارة تنفيذ أعمال الحفريات',
       dashboard: 'لوحة التحكم',
       alerts: 'الرخص والتنبيهات',
       projects: 'المشاريع والمواقع',
@@ -61,9 +66,9 @@ export default function App() {
       netProfit: 'الربح الصافي',
       save: 'حفظ',
       cancel: 'إلغاء',
-      noData: 'لا توجد بيانات مسجلة',
-      search: 'بحث...',
-      uploadFile: 'اختر صورة / ملف من الجهاز',
+      noData: 'لا توجد بيانات للعرض',
+      search: 'بحث حسب الاسم...',
+      addBtn: 'إضافة جديدة',
     }
   }[lang];
 
@@ -88,25 +93,22 @@ export default function App() {
       case 'projects':
         return (
           <>
-            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4">
+            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4 text-center">
               {lang === 'he' ? 'פרויקט חדש' : 'مشروع جديد'}
             </h3>
-            <div className="space-y-3 text-sm">
+            <div className="space-y-3 text-right">
               <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'שם הפרויקט *' : 'اسم المشروع *'}</label>
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'שם הפרויקט' : 'اسم المشروع'}</label>
                 <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
               </div>
               <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'מיקום' : 'الموقع'}</label>
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'לקוח' : 'العميل'}</label>
                 <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'סטטוס' : 'الحالة'}</label>
-                  <select className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white">
-                    <option>{lang === 'he' ? 'בתכנון' : 'قيد التخطيط'}</option>
-                    <option>{lang === 'he' ? 'פעיל' : 'نشط'}</option>
-                  </select>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תקציב (₪)' : 'الميزانية (₪)'}</label>
+                  <input type="number" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
                 <div>
                   <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תאריך התחלה' : 'تاريخ البدء'}</label>
@@ -114,44 +116,53 @@ export default function App() {
                 </div>
               </div>
               <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תקציב (₪)' : 'الميزانية (₪)'}</label>
-                <input type="number" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'מיקום / כתובת' : 'الموقع / العنوان'}</label>
+                <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
               </div>
-            </div>
-          </>
+            </>
         );
 
       case 'equipment':
         return (
           <>
-            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4">
+            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4 text-center">
               {lang === 'he' ? 'ציוד חדש' : 'معدة جديدة'}
             </h3>
-            <div className="space-y-3 text-sm">
+            <div className="space-y-3 text-right">
               <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'שם הציוד *' : 'اسم المعدة *'}</label>
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'שם הציוד' : 'اسم المعدة'}</label>
                 <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'סוג' : 'النوع'}</label>
-                  <select className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white">
-                    <option>{lang === 'he' ? 'מחפר' : 'حفار'}</option>
-                    <option>{lang === 'he' ? 'מטען' : 'جرافة'}</option>
-                    <option>{lang === 'he' ? 'משאית' : 'شاحنة'}</option>
+                  <select value={equipType} onChange={(e) => setEquipType(e.target.value)} className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white">
+                    <option value="محفر">{lang === 'he' ? 'מחפר' : 'حفار'}</option>
+                    <option value="مجد">{lang === 'he' ? 'מטען' : 'جرافة'}</option>
+                    <option value="شاحنة">{lang === 'he' ? 'משאית' : 'شاحنة'}</option>
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'סטטוס' : 'الحالة'}</label>
-                  <select className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white">
-                    <option>{lang === 'he' ? 'בהמתנה' : 'في الانتظار'}</option>
-                    <option>{lang === 'he' ? 'בפעולה' : 'قيد العمل'}</option>
-                  </select>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'מספר רישוי' : 'رقم الترخيص'}</label>
+                  <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
               </div>
-              <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'מספר רישוי' : 'رقم الترخيص'}</label>
-                <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'מחיר לשעה (₪)' : 'السعر للساعة (₪)'}</label>
+                  <input type="number" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+                </div>
+                <div>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'סטטוס' : 'الحالة'}</label>
+                  <div className="flex bg-[#0f172a] rounded-lg p-1 border border-slate-700">
+                    <button type="button" onClick={() => setEquipStatus('פעיל')} className={`flex-1 py-1 text-xs rounded ${equipStatus === 'פעיל' ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400'}`}>
+                      {lang === 'he' ? 'פעיל' : 'نشط'}
+                    </button>
+                    <button type="button" onClick={() => setEquipStatus('מועבר')} className={`flex-1 py-1 text-xs rounded ${equipStatus === 'מועבר' ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400'}`}>
+                      {lang === 'he' ? 'בהמתנה' : 'معطل/صيانة'}
+                    </button>
+                  </div>
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -159,7 +170,7 @@ export default function App() {
                   <input type="date" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
                 <div>
-                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תאריך טיפול הבא' : 'تاريخ الصيانة القادمة'}</label>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תאריך טסט/טיפול הבא' : 'تاريخ الفحص القادم'}</label>
                   <input type="date" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
               </div>
@@ -170,12 +181,12 @@ export default function App() {
       case 'employees':
         return (
           <>
-            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4">
+            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4 text-center">
               {lang === 'he' ? 'עובד חדש' : 'عامل جديد'}
             </h3>
-            <div className="space-y-3 text-sm">
+            <div className="space-y-3 text-right">
               <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'שם מלא *' : 'الاسم الكامل *'}</label>
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'שם מלא' : 'الاسم الكامل'}</label>
                 <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -188,13 +199,17 @@ export default function App() {
                   <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
               </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תאריך תחילת עבודה' : 'تاريخ بدء العمل'}</label>
+                <input type="date" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+              </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תעריף ליום (₪)' : 'أجر اليوم (₪)'}</label>
                   <input type="number" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
                 <div>
-                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תעריף שעה נוספת' : 'أجر الساعة الإضافية'}</label>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תעריף שעה נוספת (₪)' : 'أجر الساعة الإضافية (₪)'}</label>
                   <input type="number" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
               </div>
@@ -205,17 +220,17 @@ export default function App() {
       case 'customers':
         return (
           <>
-            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4">
-              {lang === 'he' ? 'לקוח חדש' : 'عميل جديد'}
+            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4 text-center">
+              {lang === 'he' ? 'לקוח / ספק חדש' : 'عميل / مورد جديد'}
             </h3>
-            <div className="space-y-3 text-sm">
+            <div className="space-y-3 text-right">
               <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'שם הלקוח / חברה *' : 'اسم العميل / الشركة *'}</label>
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'שם מלא / חברה' : 'الاسم الكامل / الشركة'}</label>
                 <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'מספר טלפון' : 'رقم الهاتف'}</label>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'טלפון' : 'الهاتف'}</label>
                   <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
                 <div>
@@ -223,9 +238,22 @@ export default function App() {
                   <input type="email" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
               </div>
-              <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'כתובת' : 'العنوان'}</label>
-                <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'מספר ע.מורשה / ח.פ' : 'رقم المشتغل / الشركة'}</label>
+                  <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+                </div>
+                <div>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'סוג לקוח' : 'نوع العميل'}</label>
+                  <div className="flex bg-[#0f172a] rounded-lg p-1 border border-slate-700">
+                    <button type="button" onClick={() => setClientType('פרטי')} className={`flex-1 py-1 text-xs rounded ${clientType === 'פרטי' ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400'}`}>
+                      {lang === 'he' ? 'פרטי' : 'خاص'}
+                    </button>
+                    <button type="button" onClick={() => setClientType('חברה')} className={`flex-1 py-1 text-xs rounded ${clientType === 'חברה' ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400'}`}>
+                      {lang === 'he' ? 'חברה' : 'شركة'}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </>
@@ -234,27 +262,31 @@ export default function App() {
       case 'quotes':
         return (
           <>
-            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4">
+            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4 text-center">
               {lang === 'he' ? 'הצעת מחיר חדשה' : 'عرض سعر جديد'}
             </h3>
-            <div className="space-y-3 text-sm">
+            <div className="space-y-3 text-right">
               <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'שם הלקוח *' : 'اسم العميل *'}</label>
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'לקוח' : 'العميل'}</label>
                 <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
               </div>
               <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תיאור העבודה' : 'وصف العمل'}</label>
-                <textarea rows="2" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white"></textarea>
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'פרויקט' : 'المشروع'}</label>
+                <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'סכום כולל (₪)' : 'المبلغ الإجمالي (₪)'}</label>
-                  <input type="number" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
-                </div>
-                <div>
-                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תוקף עד' : 'صالح حتى'}</label>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תאריך' : 'التاريخ'}</label>
                   <input type="date" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
+                <div>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'בתוקף עד' : 'صالح حتى'}</label>
+                  <input type="date" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+                </div>
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'סכום לפני מע"מ (₪)' : 'المبلغ قبل الضريبة (₪)'}</label>
+                <input type="number" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
               </div>
             </div>
           </>
@@ -263,26 +295,41 @@ export default function App() {
       case 'invoices':
         return (
           <>
-            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4">
+            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4 text-center">
               {lang === 'he' ? 'חשבונית חדשה' : 'فاتورة جديدة'}
             </h3>
-            <div className="space-y-3 text-sm">
-              <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'מספר חשבונית' : 'رقم الفاتورة'}</label>
-                <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
-              </div>
-              <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'שם הלקוח' : 'اسم العميل'}</label>
-                <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+            <div className="space-y-3 text-right">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'מספר חשבונית' : 'رقم الفاتورة'}</label>
+                  <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+                </div>
+                <div>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'לקוח' : 'العميل'}</label>
+                  <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'סכום قبل מע"מ (₪)' : 'المبلغ قبل الضريبة (₪)'}</label>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'סכום לפני מע"מ (₪)' : 'المبلغ قبل الضريبة (₪)'}</label>
                   <input type="number" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
                 <div>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תאריך הוצאה' : 'تاريخ الإصدار'}</label>
+                  <input type="date" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
                   <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תאריך פירעון' : 'تاريخ الاستحقاق'}</label>
                   <input type="date" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+                </div>
+                <div>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'סטטוס תשלום' : 'حالة الدفع'}</label>
+                  <select className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white">
+                    <option>{lang === 'he' ? 'ממתין לתשלום' : 'معلق'}</option>
+                    <option>{lang === 'he' ? 'שולם' : 'مدفوع'}</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -292,12 +339,12 @@ export default function App() {
       case 'expenses':
         return (
           <>
-            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4">
+            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4 text-center">
               {lang === 'he' ? 'הוצאה חדשה' : 'مصروف جديد'}
             </h3>
-            <div className="space-y-3 text-sm">
+            <div className="space-y-3 text-right">
               <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תיאור ההוצאה *' : 'وصف المصروف *'}</label>
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תיאור ההוצאה' : 'وصف المصروف'}</label>
                 <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -315,9 +362,15 @@ export default function App() {
                   <input type="number" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
               </div>
-              <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תאריך' : 'التاريخ'}</label>
-                <input type="date" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תאריך' : 'التاريخ'}</label>
+                  <input type="date" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+                </div>
+                <div>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'ספק / קבלן' : 'المورد / المقاول'}</label>
+                  <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+                </div>
               </div>
             </div>
           </>
@@ -326,12 +379,12 @@ export default function App() {
       case 'checks':
         return (
           <>
-            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4">
+            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4 text-center">
               {lang === 'he' ? 'שיק חדש' : 'شيك جديد'}
             </h3>
-            <div className="space-y-3 text-sm">
+            <div className="space-y-3 text-right">
               <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'מספר שיק *' : 'رقم الشيك *'}</label>
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'מספר שיק' : 'رقم الشيك'}</label>
                 <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -340,13 +393,19 @@ export default function App() {
                   <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
                 <div>
-                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'סכום השיק (₪)' : 'مبلغ الشيك (₪)'}</label>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'סכום (₪)' : 'المبلغ (₪)'}</label>
                   <input type="number" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
               </div>
-              <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תאריך פירעון' : 'تاريخ الصرف'}</label>
-                <input type="date" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תאריך פירעון' : 'تاريخ الاستحقاق'}</label>
+                  <input type="date" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+                </div>
+                <div>
+                  <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'מקור / מוטב' : 'المستفيد'}</label>
+                  <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
+                </div>
               </div>
             </div>
           </>
@@ -357,46 +416,29 @@ export default function App() {
       case 'media':
         return (
           <>
-            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4">
-              {lang === 'he' ? 'העלאת קובץ / מסמך חדש' : 'رفع ملف / وثيقة جديدة'}
+            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4 text-center">
+              {lang === 'he' ? 'העלאת קובץ חדש' : 'رفع ملف جديد'}
             </h3>
-            <div className="space-y-4 text-sm">
-              <div className="border-2 border-dashed border-slate-700 p-6 text-center rounded-xl hover:border-amber-500 cursor-pointer transition-colors">
-                <span className="text-3xl block mb-2">📁</span>
+            <div className="space-y-4 text-right">
+              <div className="border-2 border-dashed border-slate-700 p-8 text-center rounded-xl hover:border-amber-500 cursor-pointer bg-[#0f172a]/50">
+                <span className="text-4xl block mb-2">☁️</span>
                 <p className="text-xs text-slate-400">{t.uploadFile}</p>
-                <input type="file" className="hidden" id="fileUpload" />
               </div>
               <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תיאור / הערות' : 'الوصف / ملاحظات'}</label>
-                <textarea rows="3" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white"></textarea>
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'שם הקובץ / תיאור' : 'اسم الملف / الوصف'}</label>
+                <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
               </div>
             </div>
           </>
         );
 
       default:
-        return (
-          <>
-            <h3 className="font-bold text-amber-500 border-b border-slate-700 pb-2 mb-4">
-              {lang === 'he' ? 'הוספת רשומה חדשה' : 'إضافة سجل جديد'}
-            </h3>
-            <div className="space-y-3 text-sm">
-              <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'שם / תיאור *' : 'الاسم / الوصف *'}</label>
-                <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
-              </div>
-              <div>
-                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'סכום (₪)' : 'المبلغ (₪)'}</label>
-                <input type="number" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
-              </div>
-            </div>
-          </>
-        );
+        return null;
     }
   };
 
   return (
-    <div className={`min-h-screen bg-[#0f172a] text-slate-100 flex flex-col font-sans`} dir="rtl">
+    <div className="min-h-screen bg-[#0f172a] text-slate-100 flex flex-col font-sans" dir="rtl">
       {/* Header */}
       <header className="bg-[#1e293b] border-b border-slate-800 px-6 py-4 flex justify-between items-center sticky top-0 z-20">
         <div className="flex items-center space-x-4 space-x-reverse">
@@ -449,7 +491,7 @@ export default function App() {
                   { title: t.totalExpenses, val: '0 ₪', icon: '💳' },
                   { title: t.netProfit, val: '0 ₪', icon: '💰' },
                 ].map((card, i) => (
-                  <div key={i} className="bg-[#1e293b] p-4 rounded-xl border border-slate-800">
+                  <div key={i} className="bg-[#1e293b] p-4 rounded-xl border border-slate-800 text-right">
                     <div className="flex justify-between items-center text-slate-400 text-xs mb-2">
                       <span>{card.title}</span>
                       <span>{card.icon}</span>
@@ -474,7 +516,7 @@ export default function App() {
                   onClick={() => setIsModalOpen(true)}
                   className="bg-amber-500 text-slate-950 font-bold px-4 py-2 rounded-lg text-sm hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/10"
                 >
-                  + {lang === 'he' ? 'הוספה חדשה' : 'إضافة جديدة'}
+                  + {t.addBtn}
                 </button>
               </div>
 

@@ -1,14 +1,13 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 
-export default function Sidebar({ currentModule, setCurrentModule, translations }) {
+export default function Sidebar({ currentModule, setCurrentModule }) {
   const menuItems = [
-    { id: 'dashboard', label: 'اللوحة الرئيسية', icon: '📊', path: '/' },
-    { id: 'fleet', label: 'المعدات والآليات', icon: '🚜', path: '/fleet' },
-    { id: 'workOrders', label: 'أوامر العمل', icon: '📋', path: '/' },
-    { id: 'employees', label: 'الموظفين والعمال', icon: '👷', path: '/' },
+    { id: 'dashboard', label: 'اللوحة الرئيسية', icon: '📊' },
+    { id: 'fleet', label: 'المعدات والآليات', icon: '🚜' },
+    { id: 'workOrders', label: 'أوامر العمل', icon: '📋' },
+    { id: 'employees', label: 'الموظفين والعمال', icon: '👷' },
   ];
 
   return (
@@ -20,17 +19,16 @@ export default function Sidebar({ currentModule, setCurrentModule, translations 
 
         <nav className="space-y-2">
           {menuItems.map((item) => (
-            <Link
+            <button
               key={item.id}
-              href={item.path}
               onClick={() => setCurrentModule && setCurrentModule(item.id)}
-              className={`flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-lg transition-colors ${
+              className={`w-full flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-lg transition-colors text-right ${
                 currentModule === item.id ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800'
               }`}
             >
               <span className="text-xl">{item.icon}</span>
               <span className="font-medium">{item.label}</span>
-            </Link>
+            </button>
           ))}
         </nav>
       </div>

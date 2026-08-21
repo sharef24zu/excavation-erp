@@ -83,7 +83,6 @@ export default function App() {
     { id: 'insurance', label: t.insurance, icon: '🛡️' },
   ];
 
-  // دالة تشغيل نماذج المدخلات المخصصة بناءً على القسم النشط
   const renderModalContent = () => {
     switch (activeTab) {
       case 'projects':
@@ -124,7 +123,8 @@ export default function App() {
                 <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תקציב (₪)' : 'الميزانية (₪)'}</label>
                 <input type="number" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
               </div>
-            </>
+            </div>
+          </>
         );
 
       case 'equipment':
@@ -169,7 +169,8 @@ export default function App() {
                   <input type="date" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
               </div>
-            </>
+            </div>
+          </>
         );
 
       case 'employees':
@@ -203,7 +204,8 @@ export default function App() {
                   <input type="number" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white" />
                 </div>
               </div>
-            </>
+            </div>
+          </>
         );
 
       case 'insurance':
@@ -224,7 +226,8 @@ export default function App() {
                 <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'תיאור / הערות' : 'الوصف / ملاحظات'}</label>
                 <textarea rows="3" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-white"></textarea>
               </div>
-            </>
+            </div>
+          </>
         );
 
       default:
@@ -250,7 +253,7 @@ export default function App() {
 
   return (
     <div className={`min-h-screen bg-[#0f172a] text-slate-100 flex flex-col font-sans`} dir="rtl">
-      {/* Top Navigation */}
+      {/* Top Header */}
       <header className="bg-[#1e293b] border-b border-slate-800 px-6 py-4 flex justify-between items-center sticky top-0 z-20">
         <div className="flex items-center space-x-4 space-x-reverse">
           <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 bg-slate-800 rounded-lg text-amber-500 font-bold lg:hidden">
@@ -289,7 +292,7 @@ export default function App() {
           ))}
         </aside>
 
-        {/* Main View Area */}
+        {/* Main Content */}
         <main className="flex-1 p-6 overflow-y-auto max-w-7xl mx-auto w-full">
           {activeTab === 'dashboard' ? (
             <div className="space-y-6">
@@ -339,7 +342,7 @@ export default function App() {
         </main>
       </div>
 
-      {/* Dynamic Pop-up Modal */}
+      {/* Popup Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-[#1e293b] border border-slate-700 w-full max-w-lg rounded-2xl p-6 shadow-2xl space-y-4">

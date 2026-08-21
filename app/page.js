@@ -1,94 +1,229 @@
 'use client';
 
 import React, { useState } from 'react';
-import AppShell from '../components/AppShell';
 
-export default function Home() {
-  const [currentModule, setCurrentModule] = useState('dashboard');
+export default function App() {
+  const [lang, setLang] = useState('he'); // 'he' or 'ar'
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const fleetData = [
-    { id: 'EQ-01', name: 'حفار كاتربيلر 320', status: 'يعمل', driver: 'أحمد محمود', type: 'حفار' },
-    { id: 'EQ-02', name: 'جرافة كوماتسو D85', status: 'صيانة', driver: 'خالد علي', type: 'جرافة' },
-    { id: 'EQ-03', name: 'شاحنة مرسيدس قلاب', status: 'يعمل', driver: 'سعيد حسن', type: 'شاحنة' },
+  const t = {
+    he: {
+      title: 'זוביידאת חאלד עבודות עפר ופיתוח',
+      subTitle: 'ניהול חברת עפר וחפורות',
+      dashboard: 'לוח בקרה',
+      alerts: 'רישיונות ותראות',
+      projects: 'פרויקטים ואתרים',
+      equipment: 'ציוד וצי כלים',
+      employees: 'עובדים',
+      customers: 'לקוחות ושיווק',
+      quotes: 'הצעות מחיר',
+      invoices: 'חשבוניות',
+      expenses: 'הוצאות',
+      checks: 'שיקים דחויים',
+      photos: 'תמונות ציוד',
+      media: 'מדיה לשיווק',
+      insurance: 'מסמכי ביטוח',
+      activeProjects: 'פרויקטים פעילים',
+      equipmentInWork: 'ציוד בפעולה',
+      monthInvoices: 'חשבוניות ממתנות',
+      monthIncome: 'הכנסות החודש',
+      totalExpenses: 'סה"כ הוצאות',
+      netProfit: 'רווח נקי',
+      addProject: 'פרויקט חדש',
+      addEquipment: 'ציוד חדש',
+      addEmployee: 'עובד חדש',
+      addCustomer: 'לקוח / ליד',
+      addQuote: 'הצעת מחיר חדשה',
+      addInvoice: 'חשבונית חדשה',
+      addExpense: 'הוצאה חדשה',
+      addCheck: 'שיק חדש',
+      search: 'חיפוש...',
+      noData: 'אין נתונים רשומים',
+      save: 'שמירה',
+      cancel: 'ביטול',
+      allOk: 'הכל תקין, אין התראות',
+    },
+    ar: {
+      title: 'زوبيدات خالد لأعمال الحفريات والتطوير',
+      subTitle: 'إدارة شركة الحفريات',
+      dashboard: 'لوحة التحكم',
+      alerts: 'الرخص والتنبيهات',
+      projects: 'المشاريع والمواقع',
+      equipment: 'المعدات والأسطول',
+      employees: 'العمال',
+      customers: 'العملاء والتسويق',
+      quotes: 'عروض الأسعار',
+      invoices: 'الفواتير',
+      expenses: 'المصاريف',
+      checks: 'الشيكات',
+      photos: 'صور المعدات',
+      media: 'وسائط التسويق',
+      insurance: 'وثائق التأمين',
+      activeProjects: 'المشاريع النشطة',
+      equipmentInWork: 'معدات قيد العمل',
+      monthInvoices: 'فواتير معلقة',
+      monthIncome: 'دخل الشهر',
+      totalExpenses: 'إجمالي المصاريف',
+      netProfit: 'الربح الصافي',
+      addProject: '+ مشروع جديد',
+      addEquipment: '+ معدة جديدة',
+      addEmployee: '+ عامل جديد',
+      addCustomer: '+ عميل جديد',
+      addQuote: '+ عرض سعر جديد',
+      addInvoice: '+ فاتورة جديدة',
+      addExpense: '+ مصاريف جديدة',
+      addCheck: '+ شيك جديد',
+      search: 'بحث...',
+      noData: 'لا توجد بيانات مسجلة',
+      save: 'حفظ',
+      cancel: 'إلغاء',
+      allOk: 'كل شيء ممتاز، لا توجد تنبيهات',
+    }
+  }[lang];
+
+  const menuItems = [
+    { id: 'dashboard', label: t.dashboard, icon: '📊' },
+    { id: 'alerts', label: t.alerts, icon: '🔔' },
+    { id: 'projects', label: t.projects, icon: '📍' },
+    { id: 'equipment', label: t.equipment, icon: '🚜' },
+    { id: 'employees', label: t.employees, icon: '👷' },
+    { id: 'customers', label: t.customers, icon: '👥' },
+    { id: 'quotes', label: t.quotes, icon: '🏷️' },
+    { id: 'invoices', label: t.invoices, icon: '📄' },
+    { id: 'expenses', label: t.expenses, icon: '💳' },
+    { id: 'checks', label: t.checks, icon: '📑' },
+    { id: 'photos', label: t.photos, icon: '🖼️' },
+    { id: 'media', label: t.media, icon: '📱' },
+    { id: 'insurance', label: t.insurance, icon: '🛡️' },
   ];
 
   return (
-    <AppShell currentModule={currentModule} setCurrentModule={setCurrentModule}>
-      {currentModule === 'dashboard' && (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-              <h3 className="text-slate-500 text-sm font-medium">إجمالي المعدات</h3>
-              <p className="text-3xl font-bold text-slate-800 mt-2">12</p>
-              <span className="text-xs text-green-600 font-medium">↑ 2 آليات جديدة هذا الشهر</span>
-            </div>
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-              <h3 className="text-slate-500 text-sm font-medium">أوامر العمل النشطة</h3>
-              <p className="text-3xl font-bold text-slate-800 mt-2">5</p>
-              <span className="text-xs text-amber-600 font-medium">⚡ 2 بانتظار قطع الغيار</span>
-            </div>
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-              <h3 className="text-slate-500 text-sm font-medium">نسبة تشغيل الأسطول</h3>
-              <p className="text-3xl font-bold text-slate-800 mt-2">88%</p>
-              <span className="text-xs text-blue-600 font-medium">تغطية تشغيلية ممتازة</span>
-            </div>
+    <div className={`min-h-screen bg-[#0f172a] text-slate-100 flex flex-col font-sans`} dir={lang === 'ar' ? 'rtl' : 'rtl'}>
+      {/* Header */}
+      <header className="bg-[#1e293b] border-b border-slate-800 px-6 py-4 flex justify-between items-center sticky top-0 z-20">
+        <div className="flex items-center space-x-4 space-x-reverse">
+          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-amber-500 font-bold">
+            ☰
+          </button>
+          <div>
+            <h1 className="text-lg font-bold text-amber-500">{t.title}</h1>
+            <p className="text-xs text-slate-400">{t.subTitle}</p>
           </div>
+        </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-            <h3 className="text-lg font-bold text-slate-800 mb-4">ملخص لوحة التحكم</h3>
-            <p className="text-slate-600 leading-relaxed">
-              مرحباً بك في نظام إدارة أسطول الحفريات والمعدات. اضغط على أزرار القائمة الجانبية للتنقل بين الأقسام.
-            </p>
-          </div>
-        </>
-      )}
+        <button 
+          onClick={() => setLang(lang === 'he' ? 'ar' : 'he')}
+          className="bg-amber-500 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs hover:bg-amber-400 transition-colors"
+        >
+          {lang === 'he' ? 'العربية 🌐' : 'עברית 🌐'}
+        </button>
+      </header>
 
-      {currentModule === 'fleet' && (
-        <div>
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-slate-800">إدارة المعدات والآليات</h1>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-              + إضافة معدة جديدة
+      <div className="flex flex-1 relative">
+        {/* Sidebar */}
+        <aside className={`w-64 bg-[#111827] border-l border-slate-800 p-4 space-y-1 fixed lg:static inset-y-0 right-0 z-30 transition-transform ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'} overflow-y-auto`}>
+          {menuItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => { setActiveTab(item.id); setIsSidebarOpen(false); }}
+              className={`w-full flex items-center space-x-3 space-x-reverse px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                activeTab === item.id 
+                  ? 'bg-amber-500/10 text-amber-500 border-r-4 border-amber-500' 
+                  : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'
+              }`}
+            >
+              <span>{item.icon}</span>
+              <span>{item.label}</span>
             </button>
-          </div>
+          ))}
+        </aside>
 
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <table className="w-full text-right border-collapse">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 text-sm">
-                  <th className="p-4">رقم المعدة</th>
-                  <th className="p-4">اسم الآلية</th>
-                  <th className="p-4">النوع</th>
-                  <th className="p-4">السائق الحالي</th>
-                  <th className="p-4">الحالة</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700 text-sm">
-                {fleetData.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50">
-                    <td className="p-4 font-bold">{item.id}</td>
-                    <td className="p-4">{item.name}</td>
-                    <td className="p-4">{item.type}</td>
-                    <td className="p-4">{item.driver}</td>
-                    <td className="p-4">
-                      <span className={`px-2 py-1 rounded text-xs font-semibold ${item.status === 'يعمل' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
-                        {item.status}
-                      </span>
-                    </td>
-                  </tr>
+        {/* Main Content */}
+        <main className="flex-1 p-6 overflow-y-auto max-w-7xl mx-auto w-full">
+          {/* Dashboard View */}
+          {activeTab === 'dashboard' && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                {[
+                  { title: t.activeProjects, val: '0 ₪', icon: '📍' },
+                  { title: t.equipmentInWork, val: '0', icon: '🚜' },
+                  { title: t.monthInvoices, val: '0 ₪', icon: '📄' },
+                  { title: t.monthIncome, val: '0 ₪', icon: '📈' },
+                  { title: t.totalExpenses, val: '0 ₪', icon: '💳' },
+                  { title: t.netProfit, val: '0 ₪', icon: '💰' },
+                ].map((card, i) => (
+                  <div key={i} className="bg-[#1e293b] p-4 rounded-xl border border-slate-800">
+                    <div className="flex justify-between items-center text-slate-400 text-xs mb-2">
+                      <span>{card.title}</span>
+                      <span>{card.icon}</span>
+                    </div>
+                    <p className="text-xl font-bold text-slate-100">{card.val}</p>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+
+              <div className="bg-[#1e293b] p-6 rounded-xl border border-slate-800 text-center py-12">
+                <span className="text-4xl mb-2 block">🏗️</span>
+                <p className="text-slate-400 text-sm">{t.noData}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Other Tabs with Action Buttons & Modals */}
+          {activeTab !== 'dashboard' && (
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-xl font-bold text-amber-500">
+                  {menuItems.find(m => m.id === activeTab)?.label}
+                </h2>
+                <button 
+                  onClick={() => setIsModalOpen(true)}
+                  className="bg-amber-500 text-slate-950 font-bold px-4 py-2 rounded-lg text-sm hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/10"
+                >
+                  + {lang === 'he' ? 'הוספה חדשה' : 'إضافة جديدة'}
+                </button>
+              </div>
+
+              <div className="bg-[#1e293b] rounded-xl border border-slate-800 p-8 text-center">
+                <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-3 text-slate-500">
+                  ➕
+                </div>
+                <p className="text-slate-400 text-sm">{t.noData}</p>
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
+
+      {/* Popup Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[#1e293b] border border-slate-700 w-full max-w-lg rounded-2xl p-6 space-y-4 shadow-2xl">
+            <div className="flex justify-between items-center border-b border-slate-700 pb-3">
+              <h3 className="font-bold text-amber-500">{lang === 'he' ? 'טופס הוספה חדש' : 'نموذج إضافة جديد'}</h3>
+              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-white">✕</button>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'שם / תיאור' : 'الاسم / الوصف'}</label>
+                <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-amber-500 outline-none" />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">{lang === 'he' ? 'סכום / פרטים' : 'المبلغ / التفاصيل'}</label>
+                <input type="text" className="w-full bg-[#0f172a] border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-amber-500 outline-none" />
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-2 space-x-reverse pt-2">
+              <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg text-sm">{t.cancel}</button>
+              <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-amber-500 text-slate-950 font-bold rounded-lg text-sm">{t.save}</button>
+            </div>
           </div>
         </div>
       )}
-
-      {(currentModule === 'workOrders' || currentModule === 'employees') && (
-        <div className="bg-white rounded-xl p-8 border border-slate-200 text-center">
-          <h2 className="text-xl font-bold text-slate-800 mb-2">قسم {currentModule === 'workOrders' ? 'أوامر العمل' : 'الموظفين والعمال'}</h2>
-          <p className="text-slate-500">هذه الصفحة جاهزة لربط البيانات وإدخال السجلات.</p>
-        </div>
-      )}
-    </AppShell>
+    </div>
   );
 }
